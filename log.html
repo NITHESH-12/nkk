@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>FB LOGIN</title>
+
+<script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '{your-app-id}',
+        cookie     : true,
+        xfbml      : true,
+        version    : '{api-version}'
+      });
+        
+   
+        
+    };
+  
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+
+}
+function statusChangeCallback(response){
+     FB.api('/me?fields=first_name,last_name,email', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('name').innerHTML =
+        'Thanks for logging in, ' + response.first_name + ' '+response.last_name;
+        document.getElementById('email').innerHTML =
+        'Thanks for logging in, ' + response.email;
+        document.getElementById('loginb').style.display='none';
+        document.getElementById('logoutb').style.display='block';
+    });
+    function logout(response){
+        FB.logout(function(response) {
+   // Person is now logged out
+   document.getElementById('loginb').style.display='block';
+   document.getElementById('name').style.display='none';
+        document.getElementById('email').style.display='none';
+        document.getElementById('logoutb').style.display='none';
+    
+});
+    }
+}
+       </script>
+    </head>
+    <body>
+       <div id="loginb"> <fb:login-button 
+        scope="public_profile,email"
+        onlogin="checkLoginState();">
+      </fb:login-button></div>
+      <!-- <div id="data"></div> -->
+        <div id="name"></div>
+        <div id="email"></div>
+        <br><div id="logoutb" onclick="logout" style="display: none;">logout</div>
+    </body>
+</html>
